@@ -25,13 +25,21 @@ jobs:
           echo "Last commit timestamp: $LAST_COMMIT_TIME"
           echo "Last Commit: $LAST_COMMIT_TIME" > last_commit.txt
 
-      - name: Commit and push changes
+      - name: Push timestamp to separate branch
         env:
-           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
+          # clone just the other branch in a temp folder
+          git clone --depth=1 --branch=last-commit-timestamp https://x-access-token:${TOKEN}@github.com/${{ github.repository }} timestamp-branch || \
+          git clone --depth=1 https://x-access-token:${TOKEN}@github.com/${{ github.repository }} timestamp-branch && \
+          cd timestamp-branch && git checkout --orphan last-commit-timestamp && git rm -rf .
+
+          cd timestamp-branch
+          echo "Writing timestamp file..."
+          cp ../last_commit.txt .
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add last_commit.txt
-          git commit -m "Update last commit timestamp" || echo "No changes to commit"
-          git push -f https://x-access-token:${TOKEN}@github.com/${{ github.repository }} HEAD:time-stamp
-        
+          git commit -m "Update last commit timestamp"
+          git push origin last-commit-timestamp --force
