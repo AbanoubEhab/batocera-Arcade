@@ -29,16 +29,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          # clone just the other branch in a temp folder
-          git clone --depth=1 --branch=last-commit-timestamp https://x-access-token:${TOKEN}@github.com/${{ github.repository }} time-stamp || \
-          git clone --depth=1 https://x-access-token:${TOKEN}@github.com/${{ github.repository }} time-stamp && \
-          cd time-stamp && git checkout --orphan time-stamp && git rm -rf .
+          # Clone the repo into a temp folder
+          git clone --depth=1 --single-branch --branch=time-stamp https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} tmp-repo || \
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} tmp-repo
 
-          echo "Writing timestamp file..."
+          cd tmp-repo
+
+          # If branch doesn't exist, create orphan
+          git checkout time-stamp || (git checkout --orphan time-stamp && git rm -rf .)
+
           cp ../last_commit.txt .
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add last_commit.txt
-          git commit -m "Update last commit timestamp"
-          git push origin last-commit-timestamp --force
+          git commit -m "Update last commit timestamp" || echo "No changes to commit"
+          git push origin time-stamp --force
