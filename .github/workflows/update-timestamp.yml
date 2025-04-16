@@ -30,8 +30,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           # clone just the other branch in a temp folder
-          git clone --depth=1 --branch=last-commit-timestamp https://x-access-token:${TOKEN}@github.com/${{ github.repository }} timestamp-branch || \
-          git clone --depth=1 https://x-access-token:${TOKEN}@github.com/${{ github.repository }} timestamp-branch && \
+          git clone --depth=1 --branch=last-commit-timestamp https://x-access-token:${TOKEN}@github.com/${{ github.repository }} time-stamp || \
+          git clone --depth=1 https://x-access-token:${TOKEN}@github.com/${{ github.repository }} time-stamp && \
           cd timestamp-branch && git checkout --orphan last-commit-timestamp && git rm -rf .
 
           cd timestamp-branch
