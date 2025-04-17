@@ -1,3 +1,4 @@
+#! /bin/bash
 
 lastcommit=$(/usr/bin/curl https://raw.githubusercontent.com/AbanoubEhab/batocera-Arcade/refs/heads/time-stamp/last_commit.txt)
 
@@ -10,10 +11,9 @@ if [[ $lastcommit == $lastupdate ]]; then
 else
 
   echo "new update found"
-# execute update script
+  # execute update script
 
 
-echo $lastcommit > /userdata/system/gl-update/last_commit.txt
+  echo $lastcommit > /userdata/system/gl-update/last_commit.txt
 
 fi
-
