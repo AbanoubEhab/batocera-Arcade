@@ -20,7 +20,10 @@ jobs:
 
       - name: Get last commit timestamp
         run: |
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} tmp-repo
+          cd tmp-repo
           LAST_COMMIT_TIME=$(git log -1 --format=%cd --date=iso -- update.sh)
+          cd ..
           rm -rf *
           echo "Last commit timestamp: $LAST_COMMIT_TIME"
           echo "Last Commit: $LAST_COMMIT_TIME" > last_commit.txt
