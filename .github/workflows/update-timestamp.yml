@@ -20,8 +20,8 @@ jobs:
 
       - name: Get last commit timestamp
         run: |
-          rm -rf *
           LAST_COMMIT_TIME=$(git log -1 --format=%cd --date=iso -- update.sh)
+          rm -rf *
           echo "Last commit timestamp: $LAST_COMMIT_TIME"
           echo "Last Commit: $LAST_COMMIT_TIME" > last_commit.txt
 
