@@ -21,13 +21,13 @@ jobs:
       - name: Get last commit timestamp
         run: |
           rm -rf *
-          LAST_COMMIT_TIME=$(git log -1 --format=%cd --date=iso)
+          LAST_COMMIT_TIME=$(git log -1 --format=%cd --date=iso -- update.sh)
           echo "Last commit timestamp: $LAST_COMMIT_TIME"
           echo "Last Commit: $LAST_COMMIT_TIME" > last_commit.txt
 
       - name: Push timestamp to separate branch
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Clone the repo into a temp folder
           git clone --depth=1 --single-branch --branch=time-stamp https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} tmp-repo || \
